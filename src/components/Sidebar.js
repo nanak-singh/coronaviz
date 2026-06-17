@@ -6,9 +6,21 @@ import menu from '../assets/menu.svg';
 
 const Sidebar = () => {
   useEffect(() => {
+    const fetchStartTime = Date.now();
     fetch(constants.allData)
       .then(res => res.json())
-      .then(data => updateWorldStats(data));
+      .then(data => {
+        updateWorldStats(data);
+
+        if (typeof pendo !== 'undefined') {
+          pendo.track("global_statistics_loaded", {
+            total_cases: data.cases,
+            total_deaths: data.deaths,
+            total_recovered: data.recovered,
+            load_time_ms: Date.now() - fetchStartTime
+          });
+        }
+      });
   }, []);
 
   const [worldStats, updateWorldStats] = useState({});
