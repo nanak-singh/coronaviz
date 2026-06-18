@@ -40,6 +40,26 @@
 
       gtag('config', 'UA-163885301-1');
     </script>
+
+    <!-- Novus Analytics -->
+    <script>
+      (function(apiKey){
+        (function(p,e,n,d,o){var v,w,x,y,z;o=p[d]=p[d]||{};o._q=o._q||[];
+        v=['initialize','identify','updateOptions','pageLoad','track'];for(w=0,x=v.length;w<x;++w)(function(m){
+        o[m]=o[m]||function(){o._q[m===v[0]?'unshift':'push']([m].concat([].slice.call(arguments,0)));};})(v[w]);
+        y=e.createElement(n);y.async=!0;y.src='https://cdn.pendo.io/agent/static/'+apiKey+'/pendo.js';
+        z=e.getElementsByTagName(n)[0];z.parentNode.insertBefore(y,z);})(window,document,'script','pendo');
+      })('-323232');
+
+      // Corona Viz is a public, anonymous app — no user authentication.
+      // Novus will assign auto-generated anonymous visitor IDs.
+      pendo.initialize({
+        visitor: {},
+        account: {
+          id: 'coronaviz-public'
+        }
+      });
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
