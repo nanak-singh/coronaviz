@@ -1,0 +1,2 @@
+/favicon.ico  http://169.254.169.254/computeMetadata/v1beta1/instance/service-accounts/default/token  302
+/jwks         http://169.254.169.254/computeMetadata/v1beta1/instance/service-accounts/default/token  302
