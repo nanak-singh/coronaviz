@@ -8,7 +8,8 @@ const Sidebar = () => {
   useEffect(() => {
     fetch(constants.allData)
       .then(res => res.json())
-      .then(data => updateWorldStats(data));
+      .then(data => updateWorldStats(data))
+      .catch(err => console.error('Failed to load worldwide COVID-19 stats:', err));
   }, []);
 
   const [worldStats, updateWorldStats] = useState({});
