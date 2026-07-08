@@ -8,7 +8,19 @@ const Sidebar = () => {
   useEffect(() => {
     fetch(constants.allData)
       .then(res => res.json())
-      .then(data => updateWorldStats(data));
+      .then(data => {
+        updateWorldStats(data);
+
+        if (typeof pendo !== 'undefined') {
+          pendo.track("global_statistics_loaded", {
+            total_cases: data.cases,
+            total_deaths: data.deaths,
+            total_recovered: data.recovered,
+            data_source_url: constants.allData,
+            load_success: true
+          });
+        }
+      });
   }, []);
 
   const [worldStats, updateWorldStats] = useState({});

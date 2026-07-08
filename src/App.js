@@ -19,6 +19,15 @@ const App = () => {
       .then((data) => {
         updateData(data);
         loadingStatus(false);
+
+        if (typeof pendo !== 'undefined') {
+          pendo.track("covid_country_data_loaded", {
+            countries_count: data.length,
+            top_country_cases: data[0] ? data[0].country : "unknown",
+            data_source_url: constants.allCountries,
+            load_success: true
+          });
+        }
       })
 
     window.onresize = () => {

@@ -109,6 +109,26 @@ const clicked = (d, data) => {
   )[0];
 
   console.log(d, currentCountry);
+
+  if (typeof pendo !== 'undefined') {
+    const properties = {
+      country_name: d.properties.ADMIN,
+      iso_code: d.properties.BRK_A3,
+      population: d.properties.POP_EST
+    };
+    if (currentCountry) {
+      properties.total_cases = currentCountry.cases;
+      properties.today_cases = currentCountry.todayCases;
+      properties.total_deaths = currentCountry.deaths;
+      properties.today_deaths = currentCountry.todayDeaths;
+      properties.active_cases = currentCountry.active;
+      properties.recovered_cases = currentCountry.recovered;
+      properties.critical_cases = currentCountry.critical;
+      properties.cases_per_million = currentCountry.casesPerOneMillion;
+      properties.percent_affected = ((currentCountry.cases / d.properties.POP_EST) * 100).toFixed(4);
+    }
+    pendo.track("country_selected", properties);
+  }
 };
 
 export default ({ data }) => {
