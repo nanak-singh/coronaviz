@@ -110,19 +110,16 @@ const clicked = (d, data) => {
 
   console.log(d, currentCountry);
 
-  if (typeof pendo !== 'undefined') {
-    pendo.track("country_selected", {
-      country_name: d.properties.ADMIN,
-      country_code: d.properties.BRK_A3,
-      iso_a2: d.properties.ISO_A2,
-      cases: currentCountry ? currentCountry.cases : 0,
-      today_cases: currentCountry ? currentCountry.todayCases : 0,
-      deaths: currentCountry ? currentCountry.deaths : 0,
-      today_deaths: currentCountry ? currentCountry.todayDeaths : 0,
-      recovered: currentCountry ? currentCountry.recovered : 0,
-      active: currentCountry ? currentCountry.active : 0,
-      critical: currentCountry ? currentCountry.critical : 0,
-      cases_per_one_million: currentCountry ? currentCountry.casesPerOneMillion : 0,
+  if (window.pendo) {
+    window.pendo.track("country_explored", {
+      countryName: d.properties.ADMIN,
+      countryIso: d.properties.ISO_A2 || d.properties.BRK_A3,
+      totalCases: currentCountry ? currentCountry.cases : 0,
+      totalDeaths: currentCountry ? currentCountry.deaths : 0,
+      activeCases: currentCountry ? currentCountry.active : 0,
+      recoveredCases: currentCountry ? currentCountry.recovered : 0,
+      todayCases: currentCountry ? currentCountry.todayCases : 0,
+      todayDeaths: currentCountry ? currentCountry.todayDeaths : 0,
       population: d.properties.POP_EST
     });
   }
@@ -135,26 +132,12 @@ export default ({ data }) => {
   const [hoverD, setHoverD] = useState();
 
   useEffect(() => {
-    const initStartTime = Date.now();
     globeEl.current.controls().autoRotateSpeed = 0.05;
     globeEl.current.pointOfView({ lat: 24, lng: 78, altitude: 2.4 });
 
     fetch(worldMap)
       .then(res => res.json())
-      .then(mapData => {
-        setCountries(mapData);
-
-        if (typeof pendo !== 'undefined') {
-          pendo.track("globe_visualization_initialized", {
-            countries_feature_count: mapData.features ? mapData.features.length : 0,
-            initial_latitude: 24,
-            initial_longitude: 78,
-            initial_altitude: 2.4,
-            auto_rotate_speed: 0.05,
-            load_time_ms: Date.now() - initStartTime
-          });
-        }
-      });
+      .then(setCountries);
   }, []);
 
   useEffect(() => {

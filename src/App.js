@@ -14,24 +14,31 @@ const App = () => {
   const [isLoading, loadingStatus] = useState(true);
 
   useEffect(() => {
-    const fetchStartTime = Date.now();
+    const fetchStartTime = performance.now();
     fetch(constants.allCountries)
       .then((res) => res.json())
       .then((data) => {
         updateData(data);
         loadingStatus(false);
 
-        const topCountry = data[0];
-        if (typeof pendo !== 'undefined') {
-          pendo.track("covid_country_data_loaded", {
-            country_count: data.length,
-            top_country_by_cases: topCountry ? topCountry.country : "unknown",
-            top_country_cases: topCountry ? topCountry.cases : 0,
-            data_source_url: constants.allCountries,
-            load_time_ms: Date.now() - fetchStartTime
+        if (window.pendo) {
+          window.pendo.track("covid_country_data_loaded", {
+            countriesCount: data.length,
+            topCountryCases: data[0] ? data[0].cases : 0,
+            loadTimeMs: Math.round(performance.now() - fetchStartTime),
+            dataSource: "corona_lmao_ninja"
           });
         }
       })
+      .catch((err) => {
+        if (window.pendo) {
+          window.pendo.track("covid_data_load_failed", {
+            errorMessage: String(err.message || "unknown").substring(0, 100),
+            errorType: err.name || "unknown",
+            apiEndpoint: constants.allCountries
+          });
+        }
+      });
 
     window.onresize = () => {
       if (window.RT) clearTimeout(window.RT);

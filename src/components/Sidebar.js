@@ -6,18 +6,19 @@ import menu from '../assets/menu.svg';
 
 const Sidebar = () => {
   useEffect(() => {
-    const fetchStartTime = Date.now();
+    const fetchStartTime = performance.now();
     fetch(constants.allData)
       .then(res => res.json())
       .then(data => {
         updateWorldStats(data);
 
-        if (typeof pendo !== 'undefined') {
-          pendo.track("global_statistics_loaded", {
-            total_cases: data.cases,
-            total_deaths: data.deaths,
-            total_recovered: data.recovered,
-            load_time_ms: Date.now() - fetchStartTime
+        if (window.pendo) {
+          window.pendo.track("global_stats_loaded", {
+            totalCases: data.cases,
+            totalDeaths: data.deaths,
+            totalRecovered: data.recovered,
+            loadTimeMs: Math.round(performance.now() - fetchStartTime),
+            dataSource: "corona_lmao_ninja"
           });
         }
       });
@@ -37,6 +38,10 @@ const Sidebar = () => {
   };
 
   const selectTab = currRef => {
+    const tabNames = ['Overview', 'Signs', 'Prevention', 'Cure'];
+    const previousSection = tabNames[activeTabs.indexOf(true)] || 'unknown';
+    const sectionName = currRef.current.innerText;
+
     refOverviewTab.current.classList.remove('is-selected-tab-b');
     refSignsTab.current.classList.remove('is-selected-tab');
     refPrecautionTab.current.classList.remove('is-selected-tab');
@@ -53,6 +58,13 @@ const Sidebar = () => {
     if (currRef.current.innerText === 'Overview')
       currRef.current.classList.add('is-selected-tab-b');
     else currRef.current.classList.add('is-selected-tab');
+
+    if (window.pendo) {
+      window.pendo.track("health_info_section_viewed", {
+        sectionName: sectionName,
+        previousSection: previousSection
+      });
+    }
   };
 
   return (
