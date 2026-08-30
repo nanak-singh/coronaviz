@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from "react";
 
-import { constants } from '../constants';
-import numberWithCommas from '../helper';
-import menu from '../assets/menu.svg';
+import { constants } from "../constants";
+import numberWithCommas from "../helper";
+import menu from "../assets/menu.svg";
 
 const Sidebar = () => {
   useEffect(() => {
     fetch(constants.allData)
-      .then(res => res.json())
-      .then(data => updateWorldStats(data));
+      .then((res) => res.json())
+      .then((data) => updateWorldStats(data));
   }, []);
 
   const [worldStats, updateWorldStats] = useState({});
-  const [isSidebarOpen, changeSidebarStatus] = useState(false);
+  const [isSidebarOpen, changeSidebarStatus] = useState(true);
   const [activeTabs, updatetabs] = useState([true, false, false, false]);
 
   const refOverviewTab = useRef(null);
@@ -24,85 +24,85 @@ const Sidebar = () => {
     changeSidebarStatus(!isSidebarOpen);
   };
 
-  const selectTab = currRef => {
-    refOverviewTab.current.classList.remove('is-selected-tab-b');
-    refSignsTab.current.classList.remove('is-selected-tab');
-    refPrecautionTab.current.classList.remove('is-selected-tab');
-    refCureTab.current.classList.remove('is-selected-tab');
+  const selectTab = (currRef) => {
+    refOverviewTab.current.classList.remove("is-selected-tab-b");
+    refSignsTab.current.classList.remove("is-selected-tab");
+    refPrecautionTab.current.classList.remove("is-selected-tab");
+    refCureTab.current.classList.remove("is-selected-tab");
 
-    if (currRef.current.innerText === 'Signs')
+    if (currRef.current.innerText === "Signs")
       updatetabs([false, true, false, false]);
-    else if (currRef.current.innerText === 'Prevention')
+    else if (currRef.current.innerText === "Prevention")
       updatetabs([false, false, true, false]);
-    else if (currRef.current.innerText === 'Cure')
+    else if (currRef.current.innerText === "Cure")
       updatetabs([false, false, false, true]);
     else updatetabs([true, false, false, false]);
 
-    if (currRef.current.innerText === 'Overview')
-      currRef.current.classList.add('is-selected-tab-b');
-    else currRef.current.classList.add('is-selected-tab');
+    if (currRef.current.innerText === "Overview")
+      currRef.current.classList.add("is-selected-tab-b");
+    else currRef.current.classList.add("is-selected-tab");
   };
 
   return (
     <React.Fragment>
       <aside
-        className={isSidebarOpen ? 'menu sidebar' : 'menu sidebar open-sidebar'}
+        className={isSidebarOpen ? "menu sidebar" : "menu sidebar open-sidebar"}
       >
-        <div className='tabs'>
+        <div className="tabs">
           <ul>
-            <li className='is-active'>
+            <li className="is-active">
               <a>Corona Viz</a>
             </li>
-            <li className='is-active'></li>
-            <li className='is-active'></li>
-            <li className='is-active'></li>
+            <li className="is-active"></li>
+            <li className="is-active"></li>
+            <li className="is-active"></li>
             {/* <li className="is-active"><a> 🌎</a></li> */}
           </ul>
         </div>
 
-        <div className='sidebar-body'>
-          <ul className='menu-list p-c-10 line-height'>
-            <div className='notification is-link'>
-              A small hack made to help people with the challenges of{' '}
+        <div className="sidebar-body">
+          <ul className="menu-list p-c-10 line-height">
+            <div className="notification is-link">
+              A small hack made to help people with the challenges of{" "}
               <strong>COVID-19.</strong>
             </div>
             <li>
-              <a className='is-selected'>
+              <a className="is-selected">
                 Visualize COVID-19 on planetary scale
               </a>
             </li>
             {/* <li><a>About</a></li> */}
           </ul>
 
-          <p className='menu-label pt-10' style={{ textTransform: 'none' }}>
+          <p className="menu-label pt-10" style={{ textTransform: "none" }}>
             Worldwide statistics around COVID-19
           </p>
 
-          <div className='notification'>
-            <span style={{ color: 'gray' }}>Cases:</span>{' '}
+          <div className="notification">
+            <span style={{ color: "gray" }}>Cases:</span>{" "}
             <strong>{numberWithCommas(worldStats.cases)}</strong> <br />
-            <span style={{ color: 'gray' }}>Deaths:</span>{' '}
+            <span style={{ color: "gray" }}>Deaths:</span>{" "}
             <strong>{numberWithCommas(worldStats.deaths)}</strong> <br />
-            <span style={{ color: 'gray' }}>Recovered:</span>{' '}
+            <span style={{ color: "gray" }}>Recovered:</span>{" "}
             <strong>{numberWithCommas(worldStats.recovered)}</strong> <br />
             {/* <span style={{ color: 'gray' }}>Updated:</span> <strong>{numberWithCommas(worldStats.updated)}</strong> */}
           </div>
 
-          <div className='card'>
-            <header className='card-header br-rd-top'>
+          <div className="card">
+            <header className="card-header br-rd-top">
               <p
                 ref={refOverviewTab}
-                className='card-header-title is-selected-tab-b'
+                className="card-header-title is-selected-tab-b"
                 onClick={() => selectTab(refOverviewTab)}
               >
                 Overview
               </p>
             </header>
-            <div className='card-content scrollable'>
-              <div className='content'>
+            <div className="card-content scrollable">
+              <div className="content">
                 {activeTabs[0] && (
                   <div>
-                    <p className='menu-label' style={{ textTransform: 'none' }}>
+                    <p className="menu-label" style={{ textTransform: "none" }}>
                       About
                     </p>
                     Coronavirus disease (COVID-19) is an infectious disease
@@ -115,8 +115,8 @@ const Sidebar = () => {
                     are unwell.
                     <br />
                     <p
-                      className='menu-label pb-20'
-                      style={{ textTransform: 'none' }}
+                      className="menu-label pb-20"
+                      style={{ textTransform: "none" }}
                     >
                       HOW IT SPREADS
                     </p>
@@ -150,12 +150,12 @@ const Sidebar = () => {
                 {activeTabs[2] && (
                   <div>
                     <img
-                      src='https://user-images.githubusercontent.com/32517802/77585577-b4173f80-6f0a-11ea-96e6-35e0b3b93e8a.png'
-                      alt='take precautions'
+                      src="https://user-images.githubusercontent.com/32517802/77585577-b4173f80-6f0a-11ea-96e6-35e0b3b93e8a.png"
+                      alt="take precautions"
                     />
                     You can protect yourself and help prevent spreading the
                     virus to others if you: <br />
-                    <p className='menu-label' style={{ textTransform: 'none' }}>
+                    <p className="menu-label" style={{ textTransform: "none" }}>
                       Do
                     </p>
                     <ul>
@@ -169,15 +169,15 @@ const Sidebar = () => {
                       </li>
                       <li>
                         Avoid close contact (1 meter or 3 feet) with people who
-                        are unwell{' '}
+                        are unwell{" "}
                       </li>
                       <li>
                         Stay home and self-isolate from others in the household
-                        if you feel unwell{' '}
+                        if you feel unwell{" "}
                       </li>
                     </ul>
                     <br />
-                    <p className='menu-label' style={{ textTransform: 'none' }}>
+                    <p className="menu-label" style={{ textTransform: "none" }}>
                       Don't
                     </p>
                     <ul>
@@ -196,7 +196,7 @@ const Sidebar = () => {
                       coronavirus disease (COVID-19). People may need supportive
                       care to help them breathe.
                     </blockquote>
-                    <p className='menu-label' style={{ textTransform: 'none' }}>
+                    <p className="menu-label" style={{ textTransform: "none" }}>
                       Self-Care
                     </p>
                     If you have mild symptoms, stay at home until you’ve
@@ -210,7 +210,7 @@ const Sidebar = () => {
                         a sore throat and cough
                       </li>
                     </ul>
-                    <p className='menu-label' style={{ textTransform: 'none' }}>
+                    <p className="menu-label" style={{ textTransform: "none" }}>
                       Medical
                     </p>
                     If you develop a fever, cough, and have difficulty
@@ -221,51 +221,51 @@ const Sidebar = () => {
                 )}
               </div>
             </div>
-            <footer className='card-header br-rd-btm'>
+            <footer className="card-header br-rd-btm">
               <p
                 ref={refSignsTab}
-                className='card-header-title'
+                className="card-header-title"
                 onClick={() => selectTab(refSignsTab)}
               >
                 Signs
               </p>
               <p
                 ref={refPrecautionTab}
-                className='card-header-title'
+                className="card-header-title"
                 onClick={() => selectTab(refPrecautionTab)}
               >
                 Prevention
               </p>
               <p
                 ref={refCureTab}
-                className='card-header-title'
+                className="card-header-title"
                 onClick={() => selectTab(refCureTab)}
               >
                 Cure
               </p>
             </footer>
             <p
-              className='menu-label pb-20'
-              style={{ textTransform: 'none', textAlign: 'center' }}
+              className="menu-label pb-20"
+              style={{ textTransform: "none", textAlign: "center" }}
             >
-              Developed by{' '}
+              Developed by{" "}
               <span>
                 <a
-                  className='dhruv10'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href='https://github.com/dhruv10'
+                  className="dhruv10"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/dhruv10"
                 >
                   dhruv10
                 </a>
-              </span>{' '}
-              on{' '}
+              </span>{" "}
+              on{" "}
               <span>
                 <a
-                  className='dhruv10'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  href='https://github.com/dhruv10/coronaviz'
+                  className="dhruv10"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://github.com/dhruv10/coronaviz"
                 >
                   GitHub
                 </a>
@@ -274,9 +274,9 @@ const Sidebar = () => {
           </div>
         </div>
       </aside>
-      <abbr title='Menu'>
-        <button className='button menu-icon' onClick={() => toggleSideber()}>
-          <img src={menu} width='64px' style={{ transform: 'scale(1.5)' }} />
+      <abbr title="Menu">
+        <button className="button menu-icon" onClick={() => toggleSideber()}>
+          <img src={menu} width="64px" style={{ transform: "scale(1.5)" }} />
         </button>
       </abbr>
     </React.Fragment>
