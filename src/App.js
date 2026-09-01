@@ -14,12 +14,31 @@ const App = () => {
   const [isLoading, loadingStatus] = useState(true);
 
   useEffect(() => {
+    const fetchStartTime = performance.now();
     fetch(constants.allCountries)
       .then((res) => res.json())
       .then((data) => {
         updateData(data);
         loadingStatus(false);
+
+        if (window.pendo) {
+          window.pendo.track("covid_country_data_loaded", {
+            countriesCount: data.length,
+            topCountryCases: data[0] ? data[0].cases : 0,
+            loadTimeMs: Math.round(performance.now() - fetchStartTime),
+            dataSource: "corona_lmao_ninja"
+          });
+        }
       })
+      .catch((err) => {
+        if (window.pendo) {
+          window.pendo.track("covid_data_load_failed", {
+            errorMessage: String(err.message || "unknown").substring(0, 100),
+            errorType: err.name || "unknown",
+            apiEndpoint: constants.allCountries
+          });
+        }
+      });
 
     window.onresize = () => {
       if (window.RT) clearTimeout(window.RT);

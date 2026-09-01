@@ -109,6 +109,20 @@ const clicked = (d, data) => {
   )[0];
 
   console.log(d, currentCountry);
+
+  if (window.pendo) {
+    window.pendo.track("country_explored", {
+      countryName: d.properties.ADMIN,
+      countryIso: d.properties.ISO_A2 || d.properties.BRK_A3,
+      totalCases: currentCountry ? currentCountry.cases : 0,
+      totalDeaths: currentCountry ? currentCountry.deaths : 0,
+      activeCases: currentCountry ? currentCountry.active : 0,
+      recoveredCases: currentCountry ? currentCountry.recovered : 0,
+      todayCases: currentCountry ? currentCountry.todayCases : 0,
+      todayDeaths: currentCountry ? currentCountry.todayDeaths : 0,
+      population: d.properties.POP_EST
+    });
+  }
 };
 
 export default ({ data }) => {
