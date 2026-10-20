@@ -8,6 +8,30 @@ import numberWithCommas from './helper';
 
 import { constants } from './constants';
 
+// Pendo Track Event: globe_visualization_loaded reports how the country dataset
+// request settled - 'success' once the loader is replaced by the globe, or
+// 'failure' when the request or the first render fails (otherwise the loader
+// spins forever). Module-level flag so it fires at most once per page load.
+let isGlobeLoadTracked = false;
+
+const trackGlobeVisualizationLoaded = (properties) => {
+  if (isGlobeLoadTracked) return;
+  isGlobeLoadTracked = true;
+
+  if (!window.pendo || typeof window.pendo.track !== 'function') return;
+
+  // 'reload' separates the reloads window.onresize triggers from real visits.
+  const [navigationEntry] = window.performance.getEntriesByType('navigation');
+
+  window.pendo.track('globe_visualization_loaded', {
+    ...properties,
+    // Milliseconds since the page started loading.
+    loadDurationMs: Math.round(window.performance.now()),
+    navigationType: navigationEntry ? navigationEntry.type : 'unknown',
+    dataSource: constants.allCountries,
+  });
+};
+
 const App = () => {
 
   const [worldCoronaData, updateData] = useState([]);
@@ -19,7 +43,18 @@ const App = () => {
       .then((data) => {
         updateData(data);
         loadingStatus(false);
+        trackGlobeVisualizationLoaded({
+          outcome: 'success',
+          countryCount: data.length,
+        });
       })
+      .catch((err) => {
+        console.error(err);
+        trackGlobeVisualizationLoaded({
+          outcome: 'failure',
+          errorMessage: String((err && err.message) || err).slice(0, 100),
+        });
+      });
 
     window.onresize = () => {
       if (window.RT) clearTimeout(window.RT);

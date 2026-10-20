@@ -109,6 +109,22 @@ const clicked = (d, data) => {
   )[0];
 
   console.log(d, currentCountry);
+
+  // Pendo Track Event: the globe draws every country into one WebGL canvas, so
+  // a Feature tag can't tell which country was clicked - only this handler can.
+  if (window.pendo && typeof window.pendo.track === 'function') {
+    window.pendo.track('globe_country_selected', {
+      country: d.properties.ADMIN,
+      isoCode: d.properties.ISO_A2,
+      continent: d.properties.CONTINENT,
+      hasCovidData: Boolean(currentCountry),
+      ...(currentCountry && {
+        cases: currentCountry.cases,
+        active: currentCountry.active,
+        deaths: currentCountry.deaths
+      })
+    });
+  }
 };
 
 export default ({ data }) => {
