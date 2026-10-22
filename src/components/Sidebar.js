@@ -51,7 +51,7 @@ const Sidebar = () => {
         <div className='tabs'>
           <ul>
             <li className='is-active'>
-              <a>Corona Viz</a>
+              <a>Corona Viz - Diagnostics</a>
             </li>
             <li className='is-active'></li>
             <li className='is-active'></li>
